@@ -1,0 +1,20 @@
+# Cache headers served by Amplify's CDN edge.
+# HTML pages never cache — so deploys are visible immediately.
+# CSS / JS cache for 5 minutes — the `?v=N` query string busts them anyway.
+customHeaders:
+  - pattern: '**/*.html'
+    headers:
+      - key: 'Cache-Control'
+        value: 'no-cache, no-store, must-revalidate'
+  - pattern: '/'
+    headers:
+      - key: 'Cache-Control'
+        value: 'no-cache, no-store, must-revalidate'
+  - pattern: '**/*.css'
+    headers:
+      - key: 'Cache-Control'
+        value: 'public, max-age=300'
+  - pattern: '**/*.js'
+    headers:
+      - key: 'Cache-Control'
+        value: 'public, max-age=300'
