@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#FAF8F3" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <meta name="description" content="Five calm puzzles. One a day. No login, no ads, no signup." />
+  <title>Daily Games</title>
+  <link rel="stylesheet" href="css/style.css?v=2" />
+</head>
+<body>
+
+  <!-- Top bar with brand + theme/sound controls -->
+  <header class="topbar">
+    <div class="brand">Daily Games</div>
+    <div class="controls">
+      <a href="about.html" class="topbar-link">About</a>
+      <button id="soundToggle" class="icon-btn" title="Toggle sound" aria-label="Toggle sound">🔇</button>
+      <button id="themeToggle" class="icon-btn" title="Toggle theme" aria-label="Toggle theme">☾</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="center-text">
+      <h1>Daily puzzles.</h1>
+      <p class="tagline">One a day. No login.</p>
+      <p class="puzzle-num" id="puzzleNum">Loading…</p>
+    </div>
+
+    <!-- Game cards. Each shows whether you've played today. -->
+    <section class="cards" id="cards">
+      <a class="card" href="color-match.html" data-game="color-match">
+        <span class="emoji">🎨</span>
+        <div class="name">Color Match</div>
+        <div class="desc">Match today's color using RGB sliders.</div>
+        <div class="state todo">Play now →</div>
+      </a>
+      <a class="card" href="daily-maze.html" data-game="daily-maze">
+        <span class="emoji">🧩</span>
+        <div class="name">Daily Maze</div>
+        <div class="desc">Find the way out of today's 10×10 maze.</div>
+        <div class="state todo">Play now →</div>
+      </a>
+      <a class="card" href="sum-path.html" data-game="sum-path">
+        <span class="emoji">🔢</span>
+        <div class="name">Sum Path</div>
+        <div class="desc">Tap a path of numbers that adds to the target.</div>
+        <div class="state todo">Play now →</div>
+      </a>
+      <a class="card" href="pattern-find.html" data-game="pattern-find">
+        <span class="emoji">🧠</span>
+        <div class="name">Pattern Find</div>
+        <div class="desc">Spot what comes next in five sequences.</div>
+        <div class="state todo">Play now →</div>
+      </a>
+      <a class="card" href="echo-tap.html" data-game="echo-tap">
+        <span class="emoji">🎵</span>
+        <div class="name">Echo Tap</div>
+        <div class="desc">Remember and repeat the colour sequence.</div>
+        <div class="state todo">Play now →</div>
+      </a>
+      <a class="card" href="color-trick.html" data-game="color-trick">
+        <span class="emoji">🎨</span>
+        <div class="name">Color Trick</div>
+        <div class="desc">Trust your eyes, not your mind.</div>
+        <div class="state todo">Play now →</div>
+      </a>
+      <a class="card" href="word-hunt.html" data-game="word-hunt">
+        <span class="emoji">📝</span>
+        <div class="name">Word Hunt</div>
+        <div class="desc">Six tries. One five-letter word.</div>
+        <div class="state todo">Play now →</div>
+      </a>
+    </section>
+  </main>
+
+  <footer>
+    <div>Made with calm. New puzzle every day at midnight your time.</div>
+    <div style="margin-top:8px;">
+      <a href="about.html">About</a> ·
+      <a href="privacy.html">Privacy</a> ·
+      <a href="terms.html">Terms</a> ·
+      <a href="#" onclick="openConsentSettings();return false;">Cookie Settings</a>
+    </div>
+    <div style="margin-top:6px;">
+      <a href="#" onclick="openConsentSettings();return false;">Do Not Sell or Share My Personal Information</a>
+    </div>
+  </footer>
+
+  <script src="js/shared.js?v=2"></script>
+  <script>
+    // Show today's puzzle number and "played today" badges.
+    document.getElementById('puzzleNum').textContent = 'Game #' + getPuzzleNumber();
+    document.querySelectorAll('.card[data-game]').forEach(card => {
+      const game = card.getAttribute('data-game');
+      if (hasPlayedToday(game)) {
+        const state = card.querySelector('.state');
+        state.textContent = 'Played today ✅';
+        state.classList.remove('todo');
+      }
+    });
+  </script>
+</body>
+</html>
