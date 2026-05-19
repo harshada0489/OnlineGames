@@ -338,7 +338,7 @@ document.addEventListener('DOMContentLoaded', setupTopBar);
 
 /* ---- Fill these in with your real Google IDs.
    Leave a value empty to disable that service. -------------- */
-const GA_MEASUREMENT_ID = '';                       // e.g. 'G-XXXXXXXXXX'
+const GA_MEASUREMENT_ID = 'G-X6438ZM58Z';            // GA4 property for puzzleminute.com / onceadaygame.com
 const ADSENSE_CLIENT_ID = '';                       // e.g. 'ca-pub-1234567890123456'
 
 const CONSENT_KEY = 'dcg_consent';

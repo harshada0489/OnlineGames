@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://puzzleminute.com/sitemap.xml
+Sitemap: https://onceadaygame.com/sitemap-onceadaygame.xml
