@@ -380,7 +380,8 @@ function applyConsent(state) {
     ad_personalization: state.advertising ? 'granted' : 'denied',
     analytics_storage:  state.analytics   ? 'granted' : 'denied'
   });
-  if (state.analytics || state.advertising) loadGoogleTags();
+  // gtag.js is already loaded during bootstrap (in default-denied state) —
+  // this call just flips the consent flags. No need to inject scripts again.
 }
 
 /* Inject the gtag.js and AdSense scripts. Idempotent — safe to
@@ -483,22 +484,33 @@ function showConsentModal() {
 /* Exposed globally so footer links can call it. */
 window.openConsentSettings = showConsentModal;
 
-/* Bootstrap — runs immediately on script load, BEFORE any
-   Google scripts could possibly inject anything. The banner
-   itself is deferred to DOMContentLoaded since it needs <body>. */
+/* Bootstrap — runs immediately on script load.
+   Pattern (per Google Consent Mode v2 docs):
+     1. Set consent defaults to "denied" — must happen FIRST so the
+        tag never reads a permissive default.
+     2. Load gtag.js immediately, in the denied state. It respects
+        the flags: no cookies are dropped, but a cookieless ping is
+        sent. This is what Google's tag detector and conversion
+        modeling rely on. Loading later (after click-to-accept) was
+        causing "Your Google tag wasn't detected" errors.
+     3. If the user has already decided (stored consent), flip the
+        flags to match. If they have GPC enabled, treat as denied.
+     4. Otherwise show the banner; tags are already running denied.   */
 (function consentBoot() {
   initConsentMode();
+  loadGoogleTags();
+
   const stored = loadConsent();
   const gpcOn  = navigator.globalPrivacyControl === true;
 
   if (stored) {
-    // Already decided — re-apply.
     applyConsent(stored);
   } else if (gpcOn) {
-    // GPC signal = auto-decline both categories silently.
-    decideConsent({ analytics: false, advertising: false });
+    // GPC = auto-decline silently. Defaults are already denied,
+    // we just persist the decision so the banner won't show.
+    saveConsent({ analytics: false, advertising: false });
   } else {
-    // First visit — show the banner once the body exists.
+    // First visit, no GPC — show the banner once <body> exists.
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', buildCookieBanner);
     } else {
